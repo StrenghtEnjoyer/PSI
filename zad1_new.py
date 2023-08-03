@@ -1,4 +1,4 @@
-from Functions import Node, calc_v2, best_route, calculate_dis
+from functionsv1 import Node, calc_v2, best_route, calculate_dis
 from timeit import default_timer as timer
 from collections import deque
 import numpy as np
