@@ -11,9 +11,10 @@ class Node:
         self.position = None
         self.neighbors = None
         self.costs = None
+        self.dict = None
 
     def show_param(self):
-        print(self.id, self.position, self.neighbors, self.costs)
+        print(self.id, self.position, self.neighbors, self.costs, self.dict)
 
     def get_position(self):
         x = random.randint(-100, 100)
@@ -34,6 +35,10 @@ class Node:
     
     def add_costs(self, cost):
         self.costs = cost
+
+    def add_dict(self):
+        self.dict = dict(zip(self.neighbors, self.costs))
+
 
 def calculate_cost(routes, cities, assimetrial=False):
     costs = []
@@ -107,28 +112,47 @@ def calc_v2(cities, paths, assimetrical=False):
                     costs.append(cost)
     else:
         for path in paths:
-            cost = 0
-            for i in range(len(path)):
-                a = path[i:i+2]
+            if len(path) ==5:
+                cost = 0
+                for i in range(len(path)):
+                    a = path[i:i+2]
 
-                if len(a) == 2:
-                    wyn = cities[a[0]].costs[cities[a[0]].neighbors.index(a[1])]
-                    direction = cities[a[0]].position[2] - cities[a[1]].position[2]
+                    if len(a) == 2:
+                        wyn = cities[a[0]].costs[cities[a[0]].neighbors.index(a[1])]
+                        direction = cities[a[0]].position[2] - cities[a[1]].position[2]
 
-                    if direction > 0 or direction < cities[a[0]].position[2]:
-                        cost = cost + (wyn - wyn*0.1)
+                        if direction > 0 or direction < cities[a[0]].position[2]:
+                            cost = cost + (wyn - wyn*0.1)
+                            
+                        else:
+                            cost = cost + (wyn + wyn*0.1)
                         
-                    else:
-                        cost = cost + (wyn + wyn*0.1)
-                    
-                if len(a) == 1:
-                    wynf = cities[a[0]].costs[cities[a[0]].neighbors.index(path[0])]
-                    direction = cities[a[0]].position[2] - cities[path[0]].position[2]
+                    if len(a) == 1:
+                        wynf = cities[a[0]].costs[cities[a[0]].neighbors.index(path[0])]
+                        direction = cities[a[0]].position[2] - cities[path[0]].position[2]
 
-                    if direction > 0 or direction < cities[a[0]].position[2]:
-                        cost = cost + (wynf - wynf*0.1)
-                        
-                    else:
-                        cost = cost + (wyn + wyn*0.1)
-                    costs.append(cost)
+                        if direction > 0 or direction < cities[a[0]].position[2]:
+                            cost = cost + (wynf - wynf*0.1)
+                            
+                        else:
+                            cost = cost + (wyn + wyn*0.1)
+                        costs.append(cost)
     return costs
+
+def calc_v3(cities, paths):
+    costs = []
+    for path in paths:
+        cost = 0
+        for i in range(len(path)):
+            a = path[i:i+2]
+            
+            if len(a) == 2:
+                cost = cost + cities[a[0]].dict[a[1]]
+            if len(a) == 1:
+                if path[0] in list(cities[a[0]].dict.keys()):  
+                    cost = cost + cities[a[0]].dict[path[0]]
+                    costs.append(cost)
+                else:
+                    costs.append(float('inf'))
+    return costs
+

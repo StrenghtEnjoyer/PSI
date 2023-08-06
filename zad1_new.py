@@ -1,4 +1,4 @@
-from functionsv1 import Node, calc_v2, best_route, calculate_dis
+from functionsv1 import Node, calc_v3, best_route, calculate_dis
 from timeit import default_timer as timer
 from collections import deque
 import numpy as np
@@ -10,13 +10,14 @@ cities_lst = []
 for i in range(num_cit):
     node = Node(i)
     node.get_position()
-    node.get_connections(5, 100)
+    node.get_connections(num_cit, 100)
     cities_lst.append(node)
 
 calculate_dis(cities_lst)
 for i in cities_lst:
     i.show_param()
-
+for city in cities_lst:
+    city.add_dict()
 
 def dfs(city_map, start_point, path=None, path_lst=[]):
     if path is None:
@@ -36,7 +37,8 @@ def dfs(city_map, start_point, path=None, path_lst=[]):
 
 start = timer()
 dfs_paths = dfs(cities_lst, 0)
-costs_dfs = calc_v2(cities_lst, dfs_paths)
+#print(dfs_paths, len(dfs_paths))
+costs_dfs = calc_v3(cities_lst, dfs_paths)
 end = timer()
 time_dfs = end - start
 
@@ -60,7 +62,7 @@ def bfs(graph, start):
 
 start = timer()
 bfs_paths = bfs(cities_lst, 0)
-costs_bfs = calc_v2(cities_lst, bfs_paths, assimetrical=False)
+costs_bfs = calc_v3(cities_lst, bfs_paths)
 end = timer()
 time_bfs = end - start
 

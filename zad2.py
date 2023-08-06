@@ -1,4 +1,4 @@
-from functionsv1 import Node, calculate_cost, calc_v2
+from functionsv1 import Node, calculate_cost, calc_v3
 from timeit import default_timer as timer
 import numpy as np
 import math
@@ -9,7 +9,7 @@ cities_lst = []
 for i in range(num_cit):
     node = Node(i)
     node.get_position()
-    node.get_connections(5, 100)
+    node.get_connections(5, 80)
     cities_lst.append(node)
 
 def calculate_dis(cities):
@@ -24,7 +24,9 @@ def calculate_dis(cities):
     
     
 calculate_dis(cities_lst)
-
+for city in cities_lst:
+    city.add_dict()
+    
 def greed1(start, cities):
     cities_copy = cities
     path = [start]
@@ -54,7 +56,7 @@ def greed1(start, cities):
 
     last_dist = np.linalg.norm(cities_copy[path[-1]].position - cities_copy[path[0]].position)
     individual_costs.append(last_dist)
-    return path, calc_v2(cities, [path])
+    return path, calc_v3(cities, [path])
 
         
        
@@ -97,13 +99,13 @@ def primm(start, cities):
     calculate_dis(cities_lst)
     return route
    
-start = timer()
+'''start = timer()
 primm_paths = primm(0, cities_lst)
-costs_primm = calc_v2(cities_lst, [primm_paths])
+costs_primm = calc_v3(cities_lst, [primm_paths])
 end = timer()
 time_primm = end - start
 print(f'Najkrótsza scieżka dla primm oraz jej koszt: {primm_paths, costs_primm} w czasie: {time_primm}')
-
+'''
 start = timer()
 greed_paths = greed1(0, cities_lst)
 end = timer()
