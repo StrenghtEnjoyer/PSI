@@ -139,20 +139,48 @@ def calc_v2(cities, paths, assimetrical=False):
                         costs.append(cost)
     return costs
 
-def calc_v3(cities, paths):
+def calc_v3(cities, paths, assimetrical=False):
     costs = []
-    for path in paths:
-        cost = 0
-        for i in range(len(path)):
-            a = path[i:i+2]
-            
-            if len(a) == 2:
-                cost = cost + cities[a[0]].dict[a[1]]
-            if len(a) == 1:
-                if path[0] in list(cities[a[0]].dict.keys()):  
-                    cost = cost + cities[a[0]].dict[path[0]]
-                    costs.append(cost)
-                else:
-                    costs.append(float('inf'))
+    if assimetrical == False:
+        for path in paths:
+            cost = 0
+            for i in range(len(path)):
+                a = path[i:i+2]
+                
+                if len(a) == 2:
+                    cost = cost + cities[a[0]].dict[a[1]]
+                if len(a) == 1:
+                    if a[0] == path[0]:
+                        costs.append(cost)
+                        break
+                    if path[0] in list(cities[a[0]].dict.keys()):  
+                        cost = cost + cities[a[0]].dict[path[0]]
+                        costs.append(cost)
+                    else:
+                        costs.append(float('inf'))
+    if assimetrical != False:
+        for path in paths:
+            cost = 0
+            for i in range(len(path)):
+                a = path[i:i+2]
+                
+                if len(a) == 2:
+                    direction = cities[a[0]].position[2] - cities[a[1]].position[2]
+                    if direction > 0 or direction < cities[a[0]].position[2]:
+                        cost = cost + (cities[a[0]].dict[a[1]]-cities[a[0]].dict[a[1]]*0.1)
+                    else:
+                        cost = cost + (cities[a[0]].dict[a[1]]+cities[a[0]].dict[a[1]]*0.1)
+                if len(a) == 1:
+                    if a[0] == path[0]:
+                        break
+                    if path[0] in list(cities[a[0]].dict.keys()): 
+                        direction = cities[a[0]].position[2] - cities[path[0]].position[2] 
+                        if direction > 0 or direction < cities[a[0]].position[2]:
+                            cost = cost + (cities[a[0]].dict[path[0]]-cities[a[0]].dict[path[0]]*0.1)
+                        else:
+                            cost = cost + (cities[a[0]].dict[path[0]]+cities[a[0]].dict[path[0]]*0.1)
+                        costs.append(cost)
+                    else:
+                        costs.append(float('inf'))
     return costs
 

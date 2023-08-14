@@ -1,8 +1,9 @@
-from functionsv1 import Node, calculate_cost, calc_v3
+from functions import Node, calculate_cost, calc_v3
 from timeit import default_timer as timer
 import numpy as np
 import math
 import heapq
+from copy import copy
 
 num_cit = 5
 cities_lst = []
@@ -26,9 +27,13 @@ def calculate_dis(cities):
 calculate_dis(cities_lst)
 for city in cities_lst:
     city.add_dict()
-    
+
+for city in cities_lst:
+    city.show_param()
+
+
 def greed1(start, cities):
-    cities_copy = cities
+    cities_copy = cities.copy()
     path = [start]
     individual_costs = []
     cost = 0
@@ -39,7 +44,11 @@ def greed1(start, cities):
         indexes_to_remove = []
 
         if len(path) == len(cities_copy):
-                break
+                if start in connections:
+                    path.append(start)
+                    break
+                
+
         
         for j in path:
             if j in connections:
@@ -58,56 +67,33 @@ def greed1(start, cities):
     individual_costs.append(last_dist)
     return path, calc_v3(cities, [path])
 
+#greed_paths = greed1(0, cities_lst)
+#print(greed_paths)
+
+def greed2(start, cities):
+    path=[start]
+    cannot_go_back = []
+    costs = []
+    while True:
+        con_and_val = list(cities[path[-1]].dict.items()).copy()
+        xd = []
+        for i in con_and_val:
+            if i[0] not in path:
+                xd.append(i)
+        for i in con_and_val:
+            if i[0] in cannot_go_back:
+                xd.remove(i)
         
-       
+        min_con_and_val = min(xd, key=lambda x: x[1])
+        path.append(min_con_and_val[0])
+        costs.append(min_con_and_val[1])
+        if len(path) == len(cities):
+            if path[-1] in cities[path[-1]].dict.keys():
+                break
+            path[-1], path[-2] = path[-2], path[-1]
+            break
+    return path
 
-def primm(start, cities):
-    distances = [dis.costs for dis in cities]
-    
-    for i in range(len(distances)):
-        distances[i].insert(i, 0)
-
-    INF = 9999999
-    V = len(distances)
-    selected = []
-    for i in range(len(distances)):
-        selected.append(start)
-
-    no_edge = 0
-    selected[0] = True
-    route = [start]
-    costs = 0
-    while (no_edge < V - 1):
-        minimum = INF
-        x = 0
-        y = 0
-        for i in range(V):
-            if selected[i]:
-                for j in range(V):
-                    if ((not selected[j]) and distances[i][j]):  
-                        if minimum > distances[i][j]:
-                            minimum = distances[i][j]
-                            x = i
-                            y = j
-        print(str(x) + "-" + str(y) + ":" + str(distances[x][y]))
-        route.append(y)
-        costs = costs + distances[x][y]
-        selected[y] = True
-        no_edge += 1
-    plus = np.linalg.norm(cities_lst[route[-1]].position - cities_lst[start].position)
-    costs = costs + plus
-    calculate_dis(cities_lst)
-    return route
-   
-'''start = timer()
-primm_paths = primm(0, cities_lst)
-costs_primm = calc_v3(cities_lst, [primm_paths])
-end = timer()
-time_primm = end - start
-print(f'Najkrótsza scieżka dla primm oraz jej koszt: {primm_paths, costs_primm} w czasie: {time_primm}')
-'''
-start = timer()
-greed_paths = greed1(0, cities_lst)
-end = timer()
-time_greed = end - start
-print(f'Najkrótsza scieżka dla primm oraz jej koszt: {greed_paths[0], greed_paths[1]} w czasie: {time_greed}')
+aaa = greed2(0, cities_lst)
+print(aaa)
+print(calc_v3(cities_lst, [aaa]))

@@ -1,4 +1,4 @@
-from functionsv1 import Node, calc_v3, best_route, calculate_dis
+from functions import Node, calc_v3, best_route, calculate_dis
 from timeit import default_timer as timer
 from collections import deque
 import numpy as np
@@ -10,7 +10,7 @@ cities_lst = []
 for i in range(num_cit):
     node = Node(i)
     node.get_position()
-    node.get_connections(num_cit, 100)
+    node.get_connections(num_cit, 80)
     cities_lst.append(node)
 
 calculate_dis(cities_lst)
