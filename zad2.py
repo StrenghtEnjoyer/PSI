@@ -10,7 +10,7 @@ cities_lst = []
 for i in range(num_cit):
     node = Node(i)
     node.get_position()
-    node.get_connections(5, 80)
+    node.get_connections(5, 100)
     cities_lst.append(node)
 
 def calculate_dis(cities):
@@ -65,7 +65,7 @@ def greed1(start, cities):
 
     last_dist = np.linalg.norm(cities_copy[path[-1]].position - cities_copy[path[0]].position)
     individual_costs.append(last_dist)
-    return path, calc_v3(cities, [path])
+    return path #calc_v3(cities, [path])
 
 #greed_paths = greed1(0, cities_lst)
 #print(greed_paths)
@@ -92,8 +92,11 @@ def greed2(start, cities):
                 break
             path[-1], path[-2] = path[-2], path[-1]
             break
+    path.append(start)
     return path
 
-aaa = greed2(0, cities_lst)
+aaa = greed1(0, cities_lst)
+bbb = greed2(0, cities_lst)
 print(aaa)
+print(bbb)
 print(calc_v3(cities_lst, [aaa]))

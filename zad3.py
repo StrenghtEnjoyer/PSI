@@ -5,20 +5,6 @@ import copy
 
 
 
-num_cit = 5
-cities_lst = []
-for i in range(num_cit):
-    node = Node(i)
-    node.get_position()
-    node.get_connections(num_cit, 100)
-    cities_lst.append(node)
-
-calculate_dis(cities_lst)
-for city in cities_lst:
-    city.add_dict()
-
-for city in cities_lst:
-    city.show_param()
 
 #print(list(cities_lst[0].dict.keys()))
 
@@ -38,7 +24,7 @@ def calc_step(cities, path):
 
 def astar(start, finish, cities, heur):
     all_values = []
-    for i in [dis.costs for dis in cities_lst]:
+    for i in [dis.costs for dis in cities]:
         for j in i:
             all_values.append(j)
     global_min = min(all_values)
@@ -100,6 +86,6 @@ def astar(start, finish, cities, heur):
         
     
 
-aaa = astar(0, 0, cities_lst, 1)
-print(aaa)
+#aaa = astar(0, 0, cities_lst, 1)
+#print(aaa)
 

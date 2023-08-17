@@ -5,19 +5,7 @@ import numpy as np
 
 
 
-num_cit = 5
-cities_lst = []
-for i in range(num_cit):
-    node = Node(i)
-    node.get_position()
-    node.get_connections(num_cit, 80)
-    cities_lst.append(node)
 
-calculate_dis(cities_lst)
-for i in cities_lst:
-    i.show_param()
-for city in cities_lst:
-    city.add_dict()
 
 def dfs(city_map, start_point, path=None, path_lst=[]):
     if path is None:
@@ -35,12 +23,7 @@ def dfs(city_map, start_point, path=None, path_lst=[]):
 
     return path_lst
 
-start = timer()
-dfs_paths = dfs(cities_lst, 0)
-#print(dfs_paths, len(dfs_paths))
-costs_dfs = calc_v3(cities_lst, dfs_paths)
-end = timer()
-time_dfs = end - start
+
 
 def bfs(graph, start):
     queue = deque([(start, [start])])
@@ -60,11 +43,7 @@ def bfs(graph, start):
 
     return all_paths
 
-start = timer()
-bfs_paths = bfs(cities_lst, 0)
-costs_bfs = calc_v3(cities_lst, bfs_paths)
-end = timer()
-time_bfs = end - start
+
 
 ### Wyniki
 def best_route(costs, paths):
@@ -74,6 +53,5 @@ def best_route(costs, paths):
             indx = cost
     return(min_cost, paths[indx])
 
-print(f'Najkrótsza scieżka dla DFS oraz jej koszt: {best_route(costs_dfs, dfs_paths)} w czasie: {time_dfs}')
-print(f'Najkrótsza scieżka dla BFS oraz jej koszt: {best_route(costs_bfs, bfs_paths)} w czasie: {time_bfs}')
+
 

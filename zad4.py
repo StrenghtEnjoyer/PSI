@@ -8,7 +8,7 @@ from zad3 import astar
 
 
 
-num_cit = 6
+num_cit = 4
 cities_lst = []
 for i in range(num_cit):
     node = Node(i)
@@ -20,9 +20,9 @@ calculate_dis(cities_lst)
 for city in cities_lst:
     city.add_dict()
 
-for city in cities_lst:
+'''for city in cities_lst:
     city.show_param()
-
+'''
 class Aoc:
     def __init__(self, city_map: list[Node], start_point: int, ants: int):
         self.start_point = start_point
@@ -91,5 +91,5 @@ class Aoc:
 aoc = Aoc(cities_lst, 0, 30)
 zzz = aoc.get_path()
 print(zzz)
-print(calc_v3(cities_lst,[zzz]))
-print(astar(0,0,cities_lst,1))
+#print(calc_v3(cities_lst,[zzz]))
+#print(astar(0,0,cities_lst,1))
